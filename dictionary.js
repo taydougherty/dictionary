@@ -66,7 +66,7 @@ fs.open('editedDictionaryData.csv', 'a', (err, fd) => {
         .on('error', function (err) {
             console.log('Error while reading file.', err);
         })
-        .on('close', function (line) {
+        .on('close', function () {
             // when finished reading the lines
             inDefn = false;
             // console.log(definition);
