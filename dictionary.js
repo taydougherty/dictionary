@@ -1,15 +1,3 @@
-// read the raw data file
-// review data structure
-// need: word, definition (bare minimum)
-// break the lines based off of the word and definition
-// send the data back to the csv file using append file and a line break to seperate
-// what differentiates and what is a pattern and what is not
-// nested for loops are inefficient
-// check for what is 
-// conditional statements
-// pattern - all words are capitals
-// figure out which data structure to use (objects vs arrays)
-
 // require necessary packages
 var fs = require("fs");
 var readline = require('linebyline');
@@ -36,31 +24,30 @@ fs.open('editedDictionaryData.csv', 'a', (err, fd) => {
 
             word = word.join("");
             // console.log(word);
-            
+
             // apend the word to the file
             fs.appendFile(fd, word + "\n", function (err) {
                 if (err) {
                     return console.log(err);
                 } else {
-                  // console.log("added to the csv!")
+                    // console.log("added to the csv!")
                 }
             });
-    
         }
 
         // if the lines are still in the definition, append the line to the definition string
         if (inDefn) {
             defn += line;
         }
-        
+
         // check if the line begin with "Defn:" for definition
-        if (line.slice(0,5) === "Defn:") {
+        if (line.slice(0, 5) === "Defn:") {
             // if true, append line to definition string
             defn += line;
             // set variable to true
             inDefn = true;
         }
-        
+
         // if new line is not part of the definition, append the definition string to the file and set inDefinition to false
         if (inDefn && (line === "")) {
 
@@ -69,36 +56,36 @@ fs.open('editedDictionaryData.csv', 'a', (err, fd) => {
                 if (err) {
                     return console.log(err);
                 } else {
-                  // console.log("added to the csv!")
+                    // console.log("added to the csv!")
                 }
             });
 
             defn = "";
         }
     })
-    .on('error', function (err) {
-        console.log('Error while reading file.', err);
-    })
-    .on('close', function (line) {
-        // when finished reading the lines
-        inDefn = false;
-        // console.log(definition);
-        
-        // append the remaining definition string into the csv file
-        fs.appendFile(fd, defn, function (err) {
-            if (err) {
-                return console.log(err);
-            } else {
-              // console.log("added to the csv!")
-            }
-        });
+        .on('error', function (err) {
+            console.log('Error while reading file.', err);
+        })
+        .on('close', function (line) {
+            // when finished reading the lines
+            inDefn = false;
+            // console.log(definition);
 
-        // set the definition back to an empty string
-        defn = "";
+            // append the remaining definition string into the csv file
+            fs.appendFile(fd, defn, function (err) {
+                if (err) {
+                    return console.log(err);
+                } else {
+                    // console.log("added to the csv!")
+                }
+            });
 
-        // close the csv file
-        fs.close(fd, (err) => {
-            if (err) throw err;
+            // set the definition back to an empty string
+            defn = "";
+
+            // close the csv file
+            fs.close(fd, (err) => {
+                if (err) throw err;
+            });
         });
-    });
 });
